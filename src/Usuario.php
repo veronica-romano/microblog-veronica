@@ -16,7 +16,7 @@ final class Usuario{
     }
 
     public function listar():array{
-        $sql = "SELECT id nome email tipo FROM usuarios ORDER BY nome";
+        $sql = "SELECT id, nome, email, tipo FROM usuarios ORDER BY nome";
         try {
             $consulta = $this->conexao->prepare($sql);
             $consulta->execute();
@@ -30,8 +30,3 @@ final class Usuario{
 
 
 ?>
- try {
-            //code...
-        } catch (Exception $erro) {
-            die("Erro: ".$erro->getMessage());
-        }
