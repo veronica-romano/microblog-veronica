@@ -55,9 +55,9 @@ final class Usuario{
     {
         return $this->nome;
     }
-    public function setNome(int $nome)
+    public function setNome(string $nome)
     {
-        $this->id = filter_var($nome, FILTER_SANITIZE_SPECIAL_CHARS);
+        $this->nome = filter_var($nome, FILTER_SANITIZE_SPECIAL_CHARS);
 
         return $this;
     }
@@ -65,9 +65,9 @@ final class Usuario{
     {
         return $this->email;
     }
-    public function setEmail(int $email)
+    public function setEmail(string $email)
     {
-        $this->id = filter_var($email, FILTER_SANITIZE_SPECIAL_CHARS);
+        $this->email = filter_var($email, FILTER_SANITIZE_SPECIAL_CHARS);
 
         return $this;
     }
@@ -76,9 +76,9 @@ final class Usuario{
     {
         return $this->senha;
     }
-    public function setSenha(int $senha)
+    public function setSenha(string $senha)
     {
-        $this->id = filter_var($senha, FILTER_SANITIZE_SPECIAL_CHARS);
+        $this->senha = filter_var($senha, FILTER_SANITIZE_SPECIAL_CHARS);
 
         return $this;
     }
@@ -87,11 +87,15 @@ final class Usuario{
     {
         return $this->tipo;
     }
-    public function setTipo(int $tipo)
+    public function setTipo(string $tipo)
     {
-        $this->id = filter_var($tipo, FILTER_SANITIZE_SPECIAL_CHARS);
+        $this->tipo = filter_var($tipo, FILTER_SANITIZE_SPECIAL_CHARS);
 
         return $this;
+    }
+
+    public function codificaSenha(string $senha):string{
+        return password_hash($senha, PASSWORD_DEFAULT);
     }
 }
 
