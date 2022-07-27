@@ -1,5 +1,19 @@
-<?php 
+<?php
+
+use MicroBlog\Usuario;
+
 require_once "inc/cabecalho.php";
+
+if (isset($_GET['acesso_proibido'])) {
+	$feedback = "Você deve logar primeiro!";
+} elseif (isset($_GET['campos_obrigatorios'])) {
+	$feedback = "Você deve digitar login e senha!";
+} elseif (isset($_GET['nao_encontrado'])) {
+	$feedback = "Usuário não encontrado";
+}
+
+
+
 ?>
 
 
@@ -11,6 +25,7 @@ require_once "inc/cabecalho.php";
 
                 <?php if(isset($feedback)){?>
 				<p class="my-2 alert alert-warning text-center">
+					<?=$feedback?>
 				</p>
                 <?php } ?>
 
@@ -26,6 +41,32 @@ require_once "inc/cabecalho.php";
 				<button class="btn btn-primary btn-lg" name="entrar" type="submit">Entrar</button>
 
 			</form>
+			<?php 
+				if (isset($_POST['entrar'])) {
+					if (empty($_POST['email'])|| empty($_POST['senha'])){
+						header("location:login.php?campos_obrigatorios");
+					}else {
+						$usuario = new Usuario;
+						$usuario->setEmail($_POST['email']);
+						$dados = $usuario->buscar();
+						if (!$dados) {
+							echo "isto non ecxiste";
+							header("location:login.php?nao_encontrado");
+						} else {
+							if (password_verify($_POST['senha'], $dados['senha'])) {
+								echo "si";
+							} else {
+								echo "no";
+							}
+							
+						}
+						
+
+					}
+				} 
+
+				?>
+
     </div>
     
     
