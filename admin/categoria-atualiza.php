@@ -1,5 +1,10 @@
-<?php 
+<?php
+
+use MicroBlog\ControledeAcesso;
+
 require_once "../inc/cabecalho-admin.php";
+$sessao = new ControledeAcesso;
+$sessao->verificaAcessoAdmin();
 ?>
 
 

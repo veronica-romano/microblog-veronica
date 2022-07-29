@@ -25,7 +25,17 @@ final class ControledeAcesso{
         $_SESSION['tipo'] = $tipo;
     }
 
-
+    public function logout():void
+    {
+        session_start();
+        session_destroy();
+        header("location:../login.php?logout");
+    }
+    public function verificaAcessoAdmin():void{
+        if ($_SESSION['tipo'] <> 'admin') {
+            header("location:../admin/nao-autorizado.php");
+        }
+    }
 
 }
 ?>

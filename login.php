@@ -1,5 +1,6 @@
 <?php
 
+use MicroBlog\ControledeAcesso;
 use MicroBlog\Usuario;
 
 require_once "inc/cabecalho.php";
@@ -10,8 +11,11 @@ if (isset($_GET['acesso_proibido'])) {
 	$feedback = "Você deve digitar login e senha!";
 } elseif (isset($_GET['nao_encontrado'])) {
 	$feedback = "Usuário não encontrado";
+} elseif (isset($_GET['senha_incorreta'])) {
+	$feedback = "Usuário ou senha incorretos!";
+} elseif (isset($_GET['logout'])) {
+	$feedback = "Até a próxima!";
 }
-
 
 
 ?>
@@ -54,9 +58,11 @@ if (isset($_GET['acesso_proibido'])) {
 							header("location:login.php?nao_encontrado");
 						} else {
 							if (password_verify($_POST['senha'], $dados['senha'])) {
-								echo "si";
+								$sessao = new ControledeAcesso;
+								$sessao->login($dados['id'], $dados['nome'], $dados['tipo']);
+								header("location:admin/index.php?id=$dados[id]");
 							} else {
-								echo "no";
+								header("location:login.php?senha_incorreta");
 							}
 							
 						}

@@ -7,6 +7,9 @@ require_once "../src/ControleDeAcesso.php";
 $sessao = new ControledeAcesso;
 $sessao->verificaAcesso();
 
+$sessao = new ControledeAcesso;
+$sessao->verificaAcessoAdmin();
+
 $usuario = new Usuario;
 $usuario->setId($_GET['id']);
 $usuario->excluir();
