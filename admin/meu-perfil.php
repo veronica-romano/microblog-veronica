@@ -10,8 +10,12 @@ $sessao->verificaAcesso();
 $usuario = new Usuario;
 $usuario->setId($_SESSION['id']);
 $dados = $usuario->listarUm();
+
+
 if (isset($_POST['atualizar'])) {
 	$usuario->setNome($_POST['nome']);
+	$_SESSION['nome'] = $usuario->getNome();
+	
 	$usuario->setEmail($_POST['email']);
 	$usuario->setTipo($_SESSION['tipo']);
 
