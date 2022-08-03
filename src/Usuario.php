@@ -162,6 +162,16 @@ final class Usuario{
         }
         
     }
+
+        /**
+     * Get the value of conexao
+     *
+     * @return PDO
+     */
+    public function getConexao(): PDO
+    {
+        return $this->conexao;
+    }
 }
 
 

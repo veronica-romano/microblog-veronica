@@ -9,17 +9,19 @@ final class Noticia{
     private string $texto;	
     private string $resumo;	
     private string $imagem;	
-    private string $destaque;	
-    private int $usuario_id;	
+    private string $destaque;		
     private int $categoria_id;
+    private Usuario $usuario;
     private PDO $conexao;
 
     public function __construct(){ //método que funciona na criação do objeto
-        $this->conexao = Banco::conecta();
+        
+        $this->usuario =  new Usuario;
+        $this->conexao = $this->usuario->getConexao();
     }
 
     public function listar():array{
-        $sql = "SELECT id, data, titulo, texto, resumo, imagem, destaque, usuario_id, categoria_id FROM noticias ORDER BY data";
+        $sql = "SELECT id, titulo, texto, resumo, imagem, destaque, usuario_id, categoria_id FROM noticias ORDER BY data";
         try {
             $consulta = $this->conexao->prepare($sql);
             $consulta->execute();
@@ -30,16 +32,15 @@ final class Noticia{
         return $resultado;
     }
     public function inserir():void{
-        $sql = "INSERT INTO  noticias(data, titulo, texto, resumo, imagem, destaque, usuario_id, categoria_id) VALUES (:data, :titulo, :texto, :resumo, :imagem, :destaque, :usuario_id, :categoria_id) "; //named param
+        $sql = "INSERT INTO  noticias(titulo, texto, resumo, imagem, destaque, usuario_id, categoria_id) VALUES (:titulo, :texto, :resumo, :imagem, :destaque, :usuario_id, :categoria_id) "; //named param
         try {
             $consulta = $this->conexao->prepare($sql);
-            $consulta->bindParam(":data", $this->nome, PDO::PARAM_STR);
-            $consulta->bindParam(":titulo", $this->nome, PDO::PARAM_STR);
-            $consulta->bindParam(":texto", $this->nome, PDO::PARAM_STR);
-            $consulta->bindParam(":imagem", $this->nome, PDO::PARAM_STR);
-            $consulta->bindParam(":destaque", $this->nome, PDO::PARAM_STR);
-            $consulta->bindParam(":usuario_id", $this->nome, PDO::PARAM_INT);
-            $consulta->bindParam(":categoria_id", $this->nome, PDO::PARAM_INT);
+            $consulta->bindParam(":titulo", $this->titulo, PDO::PARAM_STR);
+            $consulta->bindParam(":texto", $this->texto, PDO::PARAM_STR);
+            $consulta->bindParam(":imagem", $this->imagem, PDO::PARAM_STR);
+            $consulta->bindParam(":destaque", $this->destaque, PDO::PARAM_STR);
+            $consulta->bindValue(":usuario_id", $this->usuario->getId(), PDO::PARAM_INT);
+            $consulta->bindParam(":categoria_id", $this->categoria_id, PDO::PARAM_INT);
             $consulta->execute();
         } catch (Exception $erro) {
             die("Erro: ".$erro->getMessage());
@@ -59,10 +60,9 @@ final class Noticia{
     }
 
     public function atualizar():void{
-        $sql = "UPDATE  noticias SET data = :data, titulo = :titulo, texto = :texto, imagem = :imagem, destaque = :destaque, usuario_id = :usuario_id, categoria_id = :categoria_id WHERE id = :id"; //named param
+        $sql = "UPDATE  noticias SET titulo = :titulo, texto = :texto, imagem = :imagem, destaque = :destaque, usuario_id = :usuario_id, categoria_id = :categoria_id WHERE id = :id"; //named param
         try {
             $consulta = $this->conexao->prepare($sql);
-            $consulta->bindParam(":data", $this->nome, PDO::PARAM_STR);
             $consulta->bindParam(":titulo", $this->nome, PDO::PARAM_STR);
             $consulta->bindParam(":texto", $this->nome, PDO::PARAM_STR);
             $consulta->bindParam(":imagem", $this->nome, PDO::PARAM_STR);
@@ -171,23 +171,13 @@ final class Noticia{
     }
 
 
-    public function getUsuariosId(): int
-    {
-        return $this->usuario_id;
-    }
-    public function setUsuariosId(int $usuario_id): self
-    {
-        $this->usuario_id = $usuario_id;
-
-        return $this;
-    }
 
 
-    public function getCategoriasId(): int
+    public function getCategoriaId(): int
     {
         return $this->categoria_id;
     }
-    public function setCategoriasId(int $categoria_id): self
+    public function setCategoriaId(int $categoria_id): self
     {
         $this->categoria_id = $categoria_id;
 
@@ -196,4 +186,16 @@ final class Noticia{
 
 
     
+
+
+
+    /**
+     * Get the value of usuario
+     *
+     * @return Usuario
+     */
+    public function getUsuario(): Usuario
+    {
+        return $this->usuario;
+    }
 }
