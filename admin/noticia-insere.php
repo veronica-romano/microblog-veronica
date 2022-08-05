@@ -9,17 +9,17 @@ $categoria = new Categoria;
 $listaDeCategorias = $categoria->listar();
 if (isset($_POST['inserir'])) {
 	$noticia = new Noticia;
-	$noticia->setTitulo($_POST['titulo']);
-	$noticia->setCategoriaId($_POST['categoria']);
-	$noticia->setTexto($_POST['texto']);
-	$noticia->setResumo($_POST['resumo']);
-	$noticia->setDestaque($_POST['destaque']);
+	$noticia->usuario->setId($_SESSION['id']);
 	$imagem = $_FILES['imagem'];
 	$noticia->setImagem($imagem['name']);
 	$noticia->upload($imagem);
-	$noticia->usuario->setId($_SESSION['id']);
-	// $noticia->inserir();
-	// header("location:noticias.php");
+	$noticia->setCategoriaId($_POST['categoria']);
+	$noticia->setTitulo($_POST['titulo']);
+	$noticia->setTexto($_POST['texto']);
+	$noticia->setResumo($_POST['resumo']);
+	$noticia->setDestaque($_POST['destaque']);
+	$noticia->inserir();
+	header("location:noticias.php");
 
 }
 
