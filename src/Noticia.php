@@ -11,7 +11,8 @@ final class Noticia{
     private string $imagem;	
     private string $destaque;		
     private int $categoria_id;
-    private Usuario $usuario;
+
+    public Usuario $usuario;
     private PDO $conexao;
 
     public function __construct(){ //método que funciona na criação do objeto
@@ -45,6 +46,17 @@ final class Noticia{
         } catch (Exception $erro) {
             die("Erro: ".$erro->getMessage());
         }
+    }
+
+    public function upload(array $arquivo){
+        $tiposvalidos = ["image/png", "image/jpeg", "image/gif", "image/svg+xml"];
+        if (!in_array($arquivo['type'], $tiposvalidos)) {
+            die("<script>alert('Formato inválido!'); history.back()</script>");
+        } 
+        $nome = $arquivo['name'];
+        $temporario = $arquivo['tmp_name'];
+        $destino = "../imagem/".$nome;
+        move_uploaded_file($temporario, $destino);
     }
     public function listarUm():array{
         $sql = "SELECT * FROM noticias WHERE id = :id"; //named param
@@ -91,7 +103,7 @@ final class Noticia{
     {
         return $this->id;
     }
-    public function setId(int $id): self
+    public function setId(int $id) 
     {
         $this->id = $id;
 
@@ -103,7 +115,7 @@ final class Noticia{
     {
         return $this->data;
     }
-    public function setData($data): self
+    public function setData($data) 
     {
         $this->data = $data;
 
@@ -115,7 +127,7 @@ final class Noticia{
     {
         return $this->titulo;
     }
-    public function setTitulo(string $titulo): self
+    public function setTitulo(string $titulo) 
     {
         $this->titulo = $titulo;
 
@@ -127,7 +139,7 @@ final class Noticia{
     {
         return $this->texto;
     }
-    public function setTexto(string $texto): self
+    public function setTexto(string $texto) 
     {
         $this->texto = $texto;
 
@@ -139,7 +151,7 @@ final class Noticia{
     {
         return $this->resumo;
     }
-    public function setResumo(string $resumo): self
+    public function setResumo(string $resumo) 
     {
         $this->resumo = $resumo;
 
@@ -151,7 +163,7 @@ final class Noticia{
     {
         return $this->imagem;
     }
-    public function setImagem(string $imagem): self
+    public function setImagem(string $imagem)
     {
         $this->imagem = $imagem;
 
@@ -163,7 +175,7 @@ final class Noticia{
     {
         return $this->destaque;
     }
-    public function setDestaque(string $destaque): self
+    public function setDestaque(string $destaque)
     {
         $this->destaque = $destaque;
 
@@ -177,7 +189,7 @@ final class Noticia{
     {
         return $this->categoria_id;
     }
-    public function setCategoriaId(int $categoria_id): self
+    public function setCategoriaId(int $categoria_id) 
     {
         $this->categoria_id = $categoria_id;
 

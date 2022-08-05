@@ -5,6 +5,7 @@ require_once "../inc/cabecalho-admin.php";
 $sessao = new ControledeAcesso;
 $sessao->verificaAcessoAdmin();
 $noticia = new Noticia;
+$listaDeNoticias = $noticia->listar();
 
 
 ?>
@@ -36,6 +37,34 @@ $noticia = new Noticia;
 				</thead>
 
 				<tbody>
+
+	<?php
+		foreach ($listaDeNoticias as $noticia) {
+
+	?>
+								<tr>
+                        <td> <?= $noticia ['titulo']?> </td>
+                        <td> data </td>
+                        <td> <?= $noticia ['usuario_id']?> </td>
+						<td class="text-center">
+							<a class="btn btn-warning" 
+							href="noticia-atualiza.php">
+							<i class="bi bi-pencil"></i> Atualizar
+							</a>
+						
+							<a class="btn btn-danger excluir" 
+							href="noticia-exclui.php">
+							<i class="bi bi-trash"></i> Excluir
+							</a>
+						</td>
+					</tr>
+
+	<?php
+					
+		}
+
+	?>
+
 
 					<tr>
                         <td> Título da notícia... </td>

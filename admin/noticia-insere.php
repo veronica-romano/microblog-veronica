@@ -1,7 +1,8 @@
 <?php
 use MicroBlog\Categoria;
 use MicroBlog\Noticia;
-use MicroBlog\Usuario;
+use MicroBlog\Utilitarios;
+
 require_once "../inc/cabecalho-admin.php";
 
 $categoria = new Categoria;
@@ -12,9 +13,14 @@ if (isset($_POST['inserir'])) {
 	$noticia->setCategoriaId($_POST['categoria']);
 	$noticia->setTexto($_POST['texto']);
 	$noticia->setResumo($_POST['resumo']);
-	$noticia->setImagem($_POST['imagem']);
+	$noticia->setDestaque($_POST['destaque']);
+	$imagem = $_FILES['imagem'];
+	$noticia->setImagem($imagem['name']);
+	$noticia->upload($imagem);
 	$noticia->usuario->setId($_SESSION['id']);
-	var_dump($noticia);
+	// $noticia->inserir();
+	// header("location:noticias.php");
+
 }
 
 ?>
@@ -25,7 +31,7 @@ if (isset($_POST['inserir'])) {
 		Inserir nova notícia
 		</h2>
 				
-		<form class="mx-auto w-75" action="" method="post" id="form-inserir" name="form-inserir" ">
+		<form enctype="multipart/form-data" class="mx-auto w-75" action="" method="post" id="form-inserir" name="form-inserir" ">
 
             <div class="mb-3">
                 <label class="form-label" for="categoria">Categoria:</label>
