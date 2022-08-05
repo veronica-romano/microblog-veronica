@@ -3,7 +3,7 @@ use MicroBlog\Noticia;
 use MicroBlog\ControledeAcesso;
 require_once "../inc/cabecalho-admin.php";
 $sessao = new ControledeAcesso;
-$sessao->verificaAcessoAdmin();
+$sessao->verificaAcesso();
 $noticia = new Noticia;
 $listaDeNoticias = $noticia->listar();
 
@@ -15,7 +15,7 @@ $listaDeNoticias = $noticia->listar();
 	<article class="col-12 bg-white rounded shadow my-1 py-4">
 		
 		<h2 class="text-center">
-		Notícias <span class="badge bg-dark">X</span>
+		Notícias <span class="badge bg-dark"><?=count($listaDeNoticias)?></span>
 		</h2>
 
 		<p class="text-center mt-5">
@@ -44,8 +44,8 @@ $listaDeNoticias = $noticia->listar();
 	?>
 								<tr>
                         <td> <?= $noticia ['titulo']?> </td>
-                        <td> data </td>
-                        <td> <?= $noticia ['usuario_id']?> </td>
+                        <td> <?= $noticia ['data'] ?> </td>
+                        <td ><?= $noticia ['usuario_id']?> </td>
 						<td class="text-center">
 							<a class="btn btn-warning" 
 							href="noticia-atualiza.php">
@@ -64,25 +64,6 @@ $listaDeNoticias = $noticia->listar();
 		}
 
 	?>
-
-
-					<tr>
-                        <td> Título da notícia... </td>
-                        <td> 21/12/2112 21:12 </td>
-                        <td> Autor da notícia... </td>
-						<td class="text-center">
-							<a class="btn btn-warning" 
-							href="noticia-atualiza.php">
-							<i class="bi bi-pencil"></i> Atualizar
-							</a>
-						
-							<a class="btn btn-danger excluir" 
-							href="noticia-exclui.php">
-							<i class="bi bi-trash"></i> Excluir
-							</a>
-						</td>
-					</tr>
-
 				</tbody>                
 			</table>
 	</div>

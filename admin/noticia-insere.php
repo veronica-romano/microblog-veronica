@@ -10,14 +10,14 @@ $listaDeCategorias = $categoria->listar();
 if (isset($_POST['inserir'])) {
 	$noticia = new Noticia;
 	$noticia->usuario->setId($_SESSION['id']);
-	$imagem = $_FILES['imagem'];
-	$noticia->setImagem($imagem['name']);
-	$noticia->upload($imagem);
 	$noticia->setCategoriaId($_POST['categoria']);
 	$noticia->setTitulo($_POST['titulo']);
 	$noticia->setTexto($_POST['texto']);
 	$noticia->setResumo($_POST['resumo']);
 	$noticia->setDestaque($_POST['destaque']);
+	$imagem = $_FILES['imagem'];
+	$noticia->setImagem($imagem['name']);
+	$noticia->upload($imagem);
 	$noticia->inserir();
 	header("location:noticias.php");
 

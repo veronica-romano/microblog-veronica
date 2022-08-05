@@ -22,7 +22,7 @@ final class Noticia{
     }
 
     public function listar():array{
-        $sql = "SELECT id, titulo, texto, resumo, imagem, destaque, usuario_id, categoria_id FROM noticias ORDER BY data";
+        $sql = "SELECT id, data, titulo, texto, resumo, imagem, destaque, usuario_id, categoria_id FROM noticias ORDER BY data";
         try {
             $consulta = $this->conexao->prepare($sql);
             $consulta->execute();
@@ -38,6 +38,7 @@ final class Noticia{
             $consulta = $this->conexao->prepare($sql);
             $consulta->bindParam(":titulo", $this->titulo, PDO::PARAM_STR);
             $consulta->bindParam(":texto", $this->texto, PDO::PARAM_STR);
+            $consulta->bindParam(":resumo", $this->resumo, PDO::PARAM_STR);
             $consulta->bindParam(":imagem", $this->imagem, PDO::PARAM_STR);
             $consulta->bindParam(":destaque", $this->destaque, PDO::PARAM_STR);
             $consulta->bindValue(":usuario_id", $this->usuario->getId(), PDO::PARAM_INT);
