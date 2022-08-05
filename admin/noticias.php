@@ -5,6 +5,8 @@ require_once "../inc/cabecalho-admin.php";
 $sessao = new ControledeAcesso;
 $sessao->verificaAcesso();
 $noticia = new Noticia;
+$noticia->usuario->setId($_SESSION['id']);
+$noticia->usuario->setTipo($_SESSION['tipo']);
 $listaDeNoticias = $noticia->listar();
 
 

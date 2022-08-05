@@ -21,17 +21,6 @@ final class Noticia{
         $this->conexao = $this->usuario->getConexao();
     }
 
-    public function listar():array{
-        $sql = "SELECT id, data, titulo, texto, resumo, imagem, destaque, usuario_id, categoria_id FROM noticias ORDER BY data";
-        try {
-            $consulta = $this->conexao->prepare($sql);
-            $consulta->execute();
-            $resultado = $consulta->fetchAll(PDO::FETCH_ASSOC);
-        } catch (Exception $erro) {
-            die("Erro: ".$erro->getMessage());
-        }
-        return $resultado;
-    }
     public function inserir():void{
         $sql = "INSERT INTO  noticias(titulo, texto, resumo, imagem, destaque, usuario_id, categoria_id) VALUES (:titulo, :texto, :resumo, :imagem, :destaque, :usuario_id, :categoria_id) "; //named param
         try {
@@ -59,6 +48,26 @@ final class Noticia{
         $destino = "../imagem/".$nome;
         move_uploaded_file($temporario, $destino);
     }
+
+    
+    public function listar():array{
+        if ($_SESSION['tipo'] == ['admin']) {
+            
+        } else {
+            
+        }
+        
+        $sql = "SELECT id, data, titulo, texto, resumo, imagem, destaque, usuario_id, categoria_id FROM noticias ORDER BY data";
+        try {
+            $consulta = $this->conexao->prepare($sql);
+            $consulta->execute();
+            $resultado = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $erro) {
+            die("Erro: ".$erro->getMessage());
+        }
+        return $resultado;
+    }
+
     public function listarUm():array{
         $sql = "SELECT * FROM noticias WHERE id = :id"; //named param
         try {
