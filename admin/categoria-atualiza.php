@@ -5,7 +5,7 @@ use MicroBlog\ControledeAcesso;
 
 require_once "../inc/cabecalho-admin.php";
 $sessao = new ControledeAcesso;
-$sessao->verificaAcessoAdmin();
+$sessao->verificaAcesso();
 
 $categoria = new Categoria;
 $categoria->setId($_GET['id']);

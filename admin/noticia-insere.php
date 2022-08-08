@@ -1,7 +1,7 @@
 <?php
 use MicroBlog\Categoria;
 use MicroBlog\Noticia;
-use MicroBlog\Utilitarios;
+
 
 require_once "../inc/cabecalho-admin.php";
 

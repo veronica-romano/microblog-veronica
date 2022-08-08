@@ -1,8 +1,30 @@
 <?php
+use MicroBlog\Categoria;
+use MicroBlog\Noticia;
+use MicroBlog\ControledeAcesso;
 require_once "../inc/cabecalho-admin.php";
+$sessao = new ControledeAcesso;
+$sessao->verificaAcesso();
+
+$categoria = new Categoria;
+$listaDeCategorias = $categoria->listar();
+
+$noticia = new Noticia;
+$noticia->setId($_GET['id']);
+$arrNoticia = $noticia->listarUm();
+$dados = $noticia->listarUm();
+if (isset($_POST['atualizar'])) {
+	$noticia->setCategoriaId($_POST['categoria']);
+    $noticia->setTitulo($_POST['titulo']);
+    $noticia->setTexto($_POST['texto']);
+    $noticia->setResumo($_POST['resumo']);
+    $noticia->setImagem($_POST['imagem']);
+    $noticia->setDestaque($_POST['destaque']);
+	$noticia->atualizar();
+	header("location:noticias.php");
+}
+
 ?>
-
-
 <div class="row">
     <article class="col-12 bg-white rounded shadow my-1 py-4">
 
@@ -15,33 +37,46 @@ require_once "../inc/cabecalho-admin.php";
             <div class="mb-3">
                 <label class="form-label" for="categoria">Categoria:</label>
                 <select class="form-select" name="categoria" id="categoria" required>
-                    <option value=""></option>
-                    <option value="1">Ciência</option>
-                    <option value="2">Educação</option>
-                    <option value="3">Tecnologia</option>
+                    <option value="" > </option>
+					<?php
+						foreach ($listaDeCategorias as $categoria ) {
+						?>
+							<option 
+                            <?php
+                            if ($arrNoticia['categoria_id'] === $categoria['id']) {
+                               echo "selected";
+                            }
+
+                            ?>
+                            
+                            value="<?= $categoria['id']?>"><?= $categoria['nome']?></option>
+						<?php
+						}
+
+					?>
                 </select>
             </div>
 
             <div class="mb-3">
                 <label class="form-label" for="titulo">Título:</label>
-                <input class="form-control" required type="text" id="titulo" name="titulo">
+                <input class="form-control" required type="text" value="<?= $dados['titulo']?> "  id="titulo" name="titulo">
             </div>
 
             <div class="mb-3">
                 <label class="form-label" for="texto">Texto:</label>
-                <textarea class="form-control" required name="texto" id="texto" cols="50" rows="6"></textarea>
+                <textarea class="form-control" required name="texto"  id="texto" cols="50" rows="6"><?= $dados['texto']?></textarea>
             </div>
 
             <div class="mb-3">
                 <label class="form-label" for="resumo">Resumo (máximo de 300 caracteres):</label>
                 <span id="maximo" class="badge bg-danger">0</span>
-                <textarea class="form-control" required name="resumo" id="resumo" cols="50" rows="2" maxlength="300"></textarea>
+                <textarea class="form-control" required name="resumo" id="resumo" cols="50" rows="2" maxlength="300"><?= $dados['resumo']?></textarea>
             </div>
 
             <div class="mb-3">
                 <label for="imagem-existente" class="form-label">Imagem da notícia:</label>
                 <!-- campo somente leitura, meramente informativo -->
-                <input class="form-control" type="text" id="imagem-existente" name="imagem-existente" readonly>
+                <input class="form-control" type="text" id="imagem-existente" value="<?= $dados['imagem']?>" name="imagem-existente" readonly>
             </div>
 
             <div class="mb-3">

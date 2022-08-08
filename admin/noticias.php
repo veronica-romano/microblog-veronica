@@ -1,15 +1,20 @@
-<?php 
+<?php
+use MicroBlog\Categoria;
 use MicroBlog\Noticia;
 use MicroBlog\ControledeAcesso;
+use MicroBlog\Utilitarios;
+
 require_once "../inc/cabecalho-admin.php";
 $sessao = new ControledeAcesso;
 $sessao->verificaAcesso();
+
+$categoria = new Categoria;
+$listaDeCategorias = $categoria->listar();
+
 $noticia = new Noticia;
 $noticia->usuario->setId($_SESSION['id']);
 $noticia->usuario->setTipo($_SESSION['tipo']);
 $listaDeNoticias = $noticia->listar();
-
-
 ?>
 
 
@@ -33,7 +38,14 @@ $listaDeNoticias = $noticia->listar();
 					<tr>
                         <th>Título</th>
                         <th>Data</th>
-                        <th>Autor</th>
+						<?php
+						if ($_SESSION['tipo'] == 'admin') {
+							?>
+							<th>Autor</th>
+							<?php
+						}
+						?>
+						<th>Destaque</th>
 						<th class="text-center">Operações</th>
 					</tr>
 				</thead>
@@ -41,31 +53,50 @@ $listaDeNoticias = $noticia->listar();
 				<tbody>
 
 	<?php
-		foreach ($listaDeNoticias as $noticia) {
 
-	?>
-								<tr>
-                        <td> <?= $noticia ['titulo']?> </td>
-                        <td> <?= $noticia ['data'] ?> </td>
-                        <td ><?= $noticia ['usuario_id']?> </td>
-						<td class="text-center">
-							<a class="btn btn-warning" 
-							href="noticia-atualiza.php">
-							<i class="bi bi-pencil"></i> Atualizar
-							</a>
-						
-							<a class="btn btn-danger excluir" 
-							href="noticia-exclui.php">
-							<i class="bi bi-trash"></i> Excluir
-							</a>
-						</td>
-					</tr>
+			
+			foreach ($listaDeNoticias as $noticia) {
 
-	<?php
+				?>
+				<tr>
+					<td> <?= $noticia['titulo']?> </td>
+					<td> <?= date('d/m/Y H:i', strtotime($noticia['data'])) ?> </td>
+					<?php
+						if ($_SESSION['tipo'] == 'admin') {
+							if ($noticia['autor']) {
+								?>
+								<td ><?= $noticia['autor']?> </td>
+								<?php
+							} else {
+								?>
+								<td> Equipe Microblog</td>
+								<?php
+							}
+							?>	
+							<?php
+						}
+					?>
+					<td ><?= $noticia['destaque']?> </td>
+					<td class="text-center">
+						<a class="btn btn-warning" 
+						href="noticia-atualiza.php?id=<?=$noticia['id']?>">
+						<i class="bi bi-pencil"></i> Atualizar
+						</a>
 					
-		}
+						<a class="btn btn-danger excluir" 
+						href="noticia-exclui.php?id=<?=$noticia['id']?>">
+						<i class="bi bi-trash"></i> Excluir
+						</a>
+					</td>
+				</tr>
+			
+				<?php
+								
+				}
+			
+				
+?>
 
-	?>
 				</tbody>                
 			</table>
 	</div>

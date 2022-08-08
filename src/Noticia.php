@@ -51,25 +51,28 @@ final class Noticia{
 
     
     public function listar():array{
-        if ($_SESSION['tipo'] == ['admin']) {
-            
+        if ($_SESSION['tipo'] == 'admin') {
+            $sql = "SELECT noticias.id, noticias.data, noticias.titulo, noticias.destaque, usuarios.nome AS autor FROM noticias LEFT JOIN usuarios ON noticias.usuario_id = usuarios.id ORDER BY data DESC";
         } else {
-            
+            $sql = "SELECT id, data, titulo, destaque FROM noticias WHERE usuario_id = :usuario_id ORDER BY data DESC";
         }
-        
-        $sql = "SELECT id, data, titulo, texto, resumo, imagem, destaque, usuario_id, categoria_id FROM noticias ORDER BY data";
+
         try {
             $consulta = $this->conexao->prepare($sql);
+            if ($this->usuario->getTipo() !== 'admin') {
+                $consulta->bindValue(":usuario_id", $this->usuario->getId(), PDO::PARAM_INT);
+            }
             $consulta->execute();
             $resultado = $consulta->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $erro) {
             die("Erro: ".$erro->getMessage());
         }
-        return $resultado;
+        return $resultado;  
+        
     }
 
     public function listarUm():array{
-        $sql = "SELECT * FROM noticias WHERE id = :id"; //named param
+        $sql = "SELECT titulo, texto, resumo, imagem, destaque, usuario_id, categoria_id FROM noticias WHERE id = :id"; //named param
         try {
             $consulta = $this->conexao->prepare($sql);
             $consulta->bindParam(":id", $this->id, PDO::PARAM_INT);
@@ -89,14 +92,16 @@ final class Noticia{
             $consulta->bindParam(":texto", $this->nome, PDO::PARAM_STR);
             $consulta->bindParam(":imagem", $this->nome, PDO::PARAM_STR);
             $consulta->bindParam(":destaque", $this->nome, PDO::PARAM_STR);
-            $consulta->bindParam(":usuario_id", $this->nome, PDO::PARAM_INT);
             $consulta->bindParam(":categoria_id", $this->nome, PDO::PARAM_INT);
+            $consulta->bindValue(":usuario_id", $this->usuario->getId(), PDO::PARAM_INT);
             $consulta->bindParam(":id", $this->id, PDO::PARAM_INT);
             $consulta->execute();
         } catch (Exception $erro) {
             die("Erro: ".$erro->getMessage());
         }
     }
+
+    
     public function excluir():void{
         $sql = "DELETE FROM  noticias  WHERE id = :id"; //named param
         try {
