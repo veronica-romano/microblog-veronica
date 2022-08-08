@@ -62,18 +62,10 @@ $listaDeNoticias = $noticia->listar();
 					<td> <?= $noticia['titulo']?> </td>
 					<td> <?= date('d/m/Y H:i', strtotime($noticia['data'])) ?> </td>
 					<?php
-						if ($_SESSION['tipo'] == 'admin') {
-							if ($noticia['autor']) {
-								?>
-								<td ><?= $noticia['autor']?> </td>
-								<?php
-							} else {
-								?>
-								<td> Equipe Microblog</td>
-								<?php
-							}
-							?>	
-							<?php
+						if ($_SESSION['tipo'] == 'admin') { ?>
+							<td ><?= $noticia['autor'] ? $noticia['autor'] : "Equipe Microblog"?>  </td>
+							
+					<?php
 						}
 					?>
 					<td ><?= $noticia['destaque']?> </td>
