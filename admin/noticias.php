@@ -63,7 +63,7 @@ $listaDeNoticias = $noticia->listar();
 					<td> <?= date('d/m/Y H:i', strtotime($noticia['data'])) ?> </td>
 					<?php
 						if ($_SESSION['tipo'] == 'admin') { ?>
-							<td ><?= $noticia['autor'] ? $noticia['autor'] : "Equipe Microblog"?>  </td>
+							<td ><?= $noticia['autor'] ?? "Equipe Microblog"?>  </td>
 							
 					<?php
 						}
