@@ -3,36 +3,28 @@ use MicroBlog\Categoria;
 use MicroBlog\Noticia;
 use MicroBlog\ControledeAcesso;
 use MicroBlog\Utilitarios;
-
 require_once "../inc/cabecalho-admin.php";
 $sessao = new ControledeAcesso;
 $sessao->verificaAcesso();
-
 $categoria = new Categoria;
 $listaDeCategorias = $categoria->listar();
-
 $noticia = new Noticia;
 $noticia->usuario->setId($_SESSION['id']);
 $noticia->usuario->setTipo($_SESSION['tipo']);
 $listaDeNoticias = $noticia->listar();
 ?>
-
-
 <div class="row">
 	<article class="col-12 bg-white rounded shadow my-1 py-4">
 		
 		<h2 class="text-center">
 		Notícias <span class="badge bg-dark"><?=count($listaDeNoticias)?></span>
 		</h2>
-
 		<p class="text-center mt-5">
 			<a class="btn btn-primary" href="noticia-insere.php">
 			<i class="bi bi-plus-circle"></i>	
 			Inserir nova notícia</a>
-		</p>
-				
-		<div class="table-responsive">
-		
+		</p>				
+		<div class="table-responsive">		
 			<table class="table table-hover">
 				<thead class="table-light">
 					<tr>
@@ -51,10 +43,7 @@ $listaDeNoticias = $noticia->listar();
 				</thead>
 
 				<tbody>
-
 	<?php
-
-			
 			foreach ($listaDeNoticias as $noticia) {
 
 				?>
@@ -63,8 +52,15 @@ $listaDeNoticias = $noticia->listar();
 					<td> <?= date('d/m/Y H:i', strtotime($noticia['data'])) ?> </td>
 					<?php
 						if ($_SESSION['tipo'] == 'admin') { ?>
-							<td ><?= $noticia['autor'] ?? "Equipe Microblog"?>  </td>
-							
+							<td>
+							<?php 
+							if ($noticia['autor']) {
+								echo Utilitarios::limitaCaractere($noticia['autor']);
+							}else{
+								echo "Equipe Microblog";
+							}
+							?>  
+							</td>
 					<?php
 						}
 					?>
@@ -84,19 +80,13 @@ $listaDeNoticias = $noticia->listar();
 			
 				<?php
 								
-				}
-			
-				
+				}							
 ?>
-
 				</tbody>                
 			</table>
-	</div>
-		
+	</div>		
 	</article>
 </div>
-
-
 <?php 
 require_once "../inc/rodape-admin.php";
 ?>

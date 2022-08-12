@@ -1,6 +1,5 @@
-
 <?php
-namespace Microblog;
+namespace MicroBlog;
 abstract class Utilitarios {
     public static function dump(array $dados) {
         echo "<pre>";
@@ -10,5 +9,9 @@ abstract class Utilitarios {
 
     public static function dataHora($dados){
         return date('d/m/Y H:i', strtotime($dados));
+    }
+
+    public static function limitaCaractere($dados) {
+        return mb_strimwidth($dados, 0, 20, " ...");
     }
 }

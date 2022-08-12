@@ -1,7 +1,6 @@
 <?php
 namespace MicroBlog;
 use PDO, Exception;
-
 final class Noticia{
     private int $id;
     private string	$data;	
@@ -11,7 +10,6 @@ final class Noticia{
     private string $imagem;	
     private string $destaque;		
     private int $categoria_id;
-
     public Usuario $usuario;
     private PDO $conexao;
 
@@ -72,10 +70,17 @@ final class Noticia{
     }
 
     public function listarUm():array{
-        $sql = "SELECT titulo, texto, resumo, imagem, destaque, usuario_id, categoria_id FROM noticias WHERE id = :id"; //named param
+        if ($this->usuario->getTipo() === 'admin') {
+            $sql = "SELECT titulo, texto, resumo, imagem, destaque, usuario_id, categoria_id FROM noticias WHERE id = :id"; 
+        } else {
+            $sql = "SELECT titulo, texto, resumo, imagem, destaque, usuario_id, categoria_id FROM noticias WHERE id = :id AND usuario_id = :usuario_id"; 
+        }
         try {
             $consulta = $this->conexao->prepare($sql);
             $consulta->bindParam(":id", $this->id, PDO::PARAM_INT);
+                if ($this->usuario->getTipo() !== 'admin') {
+                    $consulta->bindValue(":usuario_id", $this->usuario->getId(), PDO::PARAM_INT);
+                }
             $consulta->execute();
             $resultado = $consulta->fetch(PDO::FETCH_ASSOC);
         } catch (Exception $erro) {
@@ -85,23 +90,29 @@ final class Noticia{
     }
 
     public function atualizar():void{
-        $sql = "UPDATE  noticias SET titulo = :titulo, texto = :texto, imagem = :imagem, destaque = :destaque, usuario_id = :usuario_id, categoria_id = :categoria_id WHERE id = :id"; //named param
+        if ($this->usuario->getTipo() === 'admin') {
+            $sql = "UPDATE  noticias SET titulo = :titulo, texto = :texto, resumo = :resumo, imagem = :imagem, destaque = :destaque, categoria_id = :categoria_id WHERE id = :id"; 
+        } else {
+            $sql = "UPDATE  noticias SET titulo = :titulo, texto = :texto, resumo = :resumo, imagem = :imagem, destaque = :destaque, categoria_id = :categoria_id WHERE id = :id AND usuario_id = :usuario_id"; 
+        }
         try {
             $consulta = $this->conexao->prepare($sql);
-            $consulta->bindParam(":titulo", $this->nome, PDO::PARAM_STR);
-            $consulta->bindParam(":texto", $this->nome, PDO::PARAM_STR);
-            $consulta->bindParam(":imagem", $this->nome, PDO::PARAM_STR);
-            $consulta->bindParam(":destaque", $this->nome, PDO::PARAM_STR);
-            $consulta->bindParam(":categoria_id", $this->nome, PDO::PARAM_INT);
-            $consulta->bindValue(":usuario_id", $this->usuario->getId(), PDO::PARAM_INT);
+            $consulta->bindParam(":titulo", $this->titulo, PDO::PARAM_STR);
+            $consulta->bindParam(":texto", $this->texto, PDO::PARAM_STR);
+            $consulta->bindParam(":resumo", $this->resumo, PDO::PARAM_STR);
+            $consulta->bindParam(":imagem", $this->imagem, PDO::PARAM_STR);
+            $consulta->bindParam(":destaque", $this->destaque, PDO::PARAM_STR);
+            $consulta->bindParam(":categoria_id", $this->categoria_id, PDO::PARAM_INT);
             $consulta->bindParam(":id", $this->id, PDO::PARAM_INT);
+                if ($this->usuario->getTipo() !== 'admin') {
+                    $consulta->bindValue(":usuario_id", $this->usuario->getId(), PDO::PARAM_INT);
+                }
             $consulta->execute();
         } catch (Exception $erro) {
             die("Erro: ".$erro->getMessage());
         }
     }
 
-    
     public function excluir():void{
         $sql = "DELETE FROM  noticias  WHERE id = :id"; //named param
         try {
@@ -112,7 +123,6 @@ final class Noticia{
             die("Erro: ".$erro->getMessage());
         }
     }
-
 
     public function getId(): int
     {
@@ -125,7 +135,6 @@ final class Noticia{
         return $this;
     }
 
-
     public function getData()
     {
         return $this->data;
@@ -136,7 +145,6 @@ final class Noticia{
 
         return $this;
     }
-
 
     public function getTitulo(): string
     {
@@ -149,7 +157,6 @@ final class Noticia{
         return $this;
     }
 
-
     public function getTexto(): string
     {
         return $this->texto;
@@ -160,7 +167,6 @@ final class Noticia{
 
         return $this;
     }
-
 
     public function getResumo(): string
     {
