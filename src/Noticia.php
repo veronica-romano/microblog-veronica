@@ -133,6 +133,48 @@ final class Noticia{
         
     }
 
+    // Métodos para a área pública
+
+    public function listarDestaques():array{
+        
+        $sql = "SELECT id, imagem, titulo, resumo  FROM noticias WHERE destaque = :destaque ORDER BY data DESC";
+        try {
+            $consulta = $this->conexao->prepare($sql);
+            $consulta->bindParam(":destaque", $this->destaque, PDO::PARAM_STR);
+            $consulta->execute();
+            $resultado = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $erro) {
+            die("Erro: ".$erro->getMessage());
+        }
+        return $resultado;  
+    }
+    public function listarTodas():array{
+        
+        $sql = "SELECT id, data, titulo, resumo  FROM noticias ORDER BY data DESC";
+        try {
+            $consulta = $this->conexao->prepare($sql);
+            $consulta->execute();
+            $resultado = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $erro) {
+            die("Erro: ".$erro->getMessage());
+        }
+        return $resultado;  
+    }
+    public function listarDetalhes():array{
+        $sql = "SELECT noticias.id, noticias.data, noticias.imagem, noticias.titulo, noticias.texto, usuarios.nome AS autor FROM noticias LEFT JOIN usuarios ON noticias.usuario_id = usuarios.id WHERE noticias.id = :id";
+        try {
+            $consulta = $this->conexao->prepare($sql);
+            $consulta->bindParam(":id", $this->id, PDO::PARAM_INT);
+            $consulta->execute();
+            $resultado = $consulta->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $erro) {
+            die("Erro: ".$erro->getMessage());
+        }
+        return $resultado;  
+    }
+
+
+
     public function getId(): int
     {
         return $this->id;

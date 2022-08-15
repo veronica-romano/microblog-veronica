@@ -1,12 +1,15 @@
 <?php 
+use MicroBlog\Categoria;
+require_once "vendor/autoload.php";
 require_once "inc/cabecalho.php";
+$categorias = new Categoria;
 ?>
 
 
 <div class="row my-1 mx-md-n1">
 
     <article class="col-12">
-        <h2 class=" ">Notícias sobre <span class="badge bg-primary">categoria</span> </h2>
+        <h2 class=" ">Notícias sobre <span class="badge bg-primary"><?=$categoria['nome']?></span> </h2>
         
         <div class="row my-1">
             <div class="col-12 px-md-1">
@@ -38,7 +41,9 @@ require_once "inc/cabecalho.php";
 </div>        
         
           
-
+<?php 
+include_once "inc/todas.php";
+?> 
 <?php 
 require_once "inc/rodape.php";
 ?>
