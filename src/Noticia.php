@@ -173,6 +173,19 @@ final class Noticia{
         return $resultado;  
     }
 
+    public function listarBusca():array{
+        $sql = "SELECT noticias.id, noticias.data, noticias.imagem, noticias.titulo, noticias.texto, usuarios.nome AS autor, categorias.nome AS categoria FROM noticias LEFT JOIN usuarios ON noticias.usuario_id = usuarios.id WHERE noticias.id = :id";
+        try {
+            $consulta = $this->conexao->prepare($sql);
+            $consulta->bindParam(":id", $this->id, PDO::PARAM_INT);
+            $consulta->execute();
+            $resultado = $consulta->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $erro) {
+            die("Erro: ".$erro->getMessage());
+        }
+        return $resultado;  
+    }
+
 
 
     public function getId(): int
