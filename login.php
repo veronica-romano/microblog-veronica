@@ -1,10 +1,7 @@
 <?php
-
 use MicroBlog\ControledeAcesso;
 use MicroBlog\Usuario;
-
 require_once "inc/cabecalho.php";
-
 if (isset($_GET['acesso_proibido'])) {
 	$feedback = "Você deve logar primeiro!";
 } elseif (isset($_GET['campos_obrigatorios'])) {
@@ -16,11 +13,7 @@ if (isset($_GET['acesso_proibido'])) {
 } elseif (isset($_GET['logout'])) {
 	$feedback = "Até a próxima!";
 }
-
-
 ?>
-
-
 <div class="row">
     <div class="bg-white rounded shadow col-12 my-1 py-4">
         <h2 class="text-center fw-light">Acesso à área administrativa</h2>

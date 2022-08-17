@@ -1,5 +1,6 @@
 <?php
-
+// inicialização do output buffer, gerenciamento da memória de saída/relacionamentos
+ob_start();
 use MicroBlog\ControledeAcesso;
 
 require_once "../vendor/autoload.php";

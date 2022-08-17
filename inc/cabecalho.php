@@ -1,4 +1,6 @@
 <?php
+// inicialização do output buffer, gerenciamento da memória de saída/relacionamentos
+ob_start();
 use MicroBlog\Categoria;
 use MicroBlog\Noticia;
 require_once "vendor/autoload.php";
@@ -60,16 +62,14 @@ $noticia = new Noticia;
         </li>
       </ul>
 
-      <form autocomplete="off" class="d-flex" action="resultados.php" method="POST">
-        <input class="form-control me-2" type="search" placeholder="Pesquise aqui" aria-label="Pesquise aqui">
+      <form autocomplete="off" class="d-flex" action="resultados.php" method="GET">
+        <input name="busca" class="form-control me-2" type="search" placeholder="Pesquise aqui" aria-label="Pesquise aqui">
         <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">OK</button>
       </form>
     </div>
   </div>
 </nav>
-
 </header>
-
 <main class="flex-shrink-0">
     <div class="container">
 

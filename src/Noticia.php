@@ -3,6 +3,7 @@ namespace MicroBlog;
 use PDO, Exception;
 final class Noticia{
     private int $id;
+    private $termo;
     private string	$data;	
     private string $titulo;	
     private string $texto;	
@@ -198,6 +199,18 @@ final class Noticia{
         }
         return $resultado;  
     }
+    public function busca():array{
+        $sql= "SELECT titulo, data, resumo, id FROM noticias WHERE titulo LIKE :termo OR texto LIKE :termo OR resumo LIKE :termo ORDER BY data DESC";
+        try {
+            $consulta = $this->conexao->prepare($sql);
+            $consulta->bindValue(":termo", '%'.$this->termo.'%', PDO::PARAM_STR);
+            $consulta->execute();
+            $resultado = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $erro) {
+            die("Erro: ".$erro->getMessage());
+        }
+        return $resultado;  
+    }
     
 
 
@@ -300,13 +313,21 @@ final class Noticia{
 
 
 
-    /**
-     * Get the value of usuario
-     *
-     * @return Usuario
-     */
+ 
     public function getUsuario(): Usuario
     {
         return $this->usuario;
+    }
+
+
+    public function getTermo()
+    {
+        return $this->termo;
+    }
+    public function setTermo($termo): self
+    {
+        $this->termo = filter_var($termo, FILTER_SANITIZE_SPECIAL_CHARS);
+
+        return $this;
     }
 }
