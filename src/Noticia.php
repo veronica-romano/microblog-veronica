@@ -186,6 +186,20 @@ final class Noticia{
         return $resultado;  
     }
 
+    public function listarPorCategoria():array{
+        $sql= "SELECT noticias.id AS nid, noticias.data, noticias.titulo, noticias.resumo, noticias.usuario_id, noticias.categoria_id, usuarios.nome AS autor, categorias.id, categorias.nome FROM noticias INNER JOIN usuarios ON noticias.usuario_id = usuarios.id INNER JOIN categorias ON noticias.categoria_id = categorias.id WHERE categorias.id = :categoria_id";
+        try {
+            $consulta = $this->conexao->prepare($sql);
+            $consulta->bindParam(":categoria_id", $this->categoria_id, PDO::PARAM_INT);
+            $consulta->execute();
+            $resultado = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $erro) {
+            die("Erro: ".$erro->getMessage());
+        }
+        return $resultado;  
+    }
+    
+
 
 
     public function getId(): int

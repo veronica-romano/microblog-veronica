@@ -1,8 +1,6 @@
 <?php
-use MicroBlog\Noticia;
 use MicroBlog\Utilitarios;
 require_once "inc/cabecalho.php";
-$noticia = new Noticia;
 $noticia->setId($_GET['id']);
 $detalhes = $noticia->listarDetalhes();
 ?>
