@@ -1,24 +1,22 @@
-<?php 
+<?php
+use MicroBlog\Utilitarios;
 require_once "inc/cabecalho.php";
+$noticia->setId($_GET['id']);
+$detalhes = $noticia->listarDetalhes();
 ?>
-
-
 <div class="row my-1 mx-md-n1">
-
     <article class="col-12">
-        <h2> Título da notícia... </h2>
+        <h2> <?= Utilitarios::formataTexto($detalhes['titulo']) ?> </h2>
         <p class="font-weight-light">
-            <time>Data da notícia...</time> - <span>Autor da notícia</span>
+            <time><?=Utilitarios::dataHora($detalhes['data']) ?></time> - <span><?=$detalhes['autor'] ?? "<i>Equipe Microblog</i>"  ?></span>
         </p>
-        <img src="https://picsum.photos/seed/picsum/200/100" alt="" class="float-left pr-2 img-fluid">
-        <p>Texto da notícia...</p>
-    </article>
-    
-
-</div>        
-        
-          
-
+        <img src="imagem/<?=Utilitarios::formataTexto($detalhes['imagem']) ?>" alt="" class="float-start pe-2 img-fluid">
+        <p><?=Utilitarios::formataTexto($detalhes['texto']) ?></p>
+    </article>    
+</div>                          
+<?php 
+include_once "inc/todas.php";
+?> 
 <?php 
 require_once "inc/rodape.php";
 ?>

@@ -1,5 +1,32 @@
-<?php 
+<?php
+
+use MicroBlog\Usuario;
+use MicroBlog\ControledeAcesso;
+
 require_once "../inc/cabecalho-admin.php";
+
+$sessao = new ControledeAcesso;
+$sessao->verificaAcessoAdmin();
+
+$usuario = new Usuario;
+$usuario->setId($_GET['id']);
+$dados = $usuario->listarUm();
+
+
+if (isset($_POST['atualizar'])) {
+	$usuario->setNome($_POST['nome']);
+	$usuario->setEmail($_POST['email']);
+	$usuario->setTipo($_POST['tipo']);
+
+	if (empty ($_POST['senha'])) {
+		$usuario->setSenha($dados['senha']);
+		
+	} else {
+		$usuario->setSenha($usuario->verificaSenha($_POST['senha'], $dados['senha']));
+	}
+	$usuario->atualizar();
+	header("location:usuarios.php");
+}
 ?>
 
 
@@ -14,12 +41,12 @@ require_once "../inc/cabecalho-admin.php";
 
 			<div class="mb-3">
 				<label class="form-label" for="nome">Nome:</label>
-				<input class="form-control" type="text" id="nome" name="nome" required>
+				<input class="form-control" type="text" value="<?= $dados['nome']?>" id="nome" name="nome" required>
 			</div>
 
 			<div class="mb-3">
 				<label class="form-label" for="email">E-mail:</label>
-				<input class="form-control" type="email" id="email" name="email" required>
+				<input class="form-control" type="email" id="email" value="<?= $dados['email']?> "name="email" required>
 			</div>
 
 			<div class="mb-3">
@@ -28,11 +55,11 @@ require_once "../inc/cabecalho-admin.php";
 			</div>
 
 			<div class="mb-3">
-				<label class="form-label" for="tipo">Tipo:</label>
+				<label class="form-label" for="tipo" >Tipo:</label>
 				<select class="form-select" name="tipo" id="tipo" required>
 					<option value=""></option>
-					<option value="editor">Editor</option>
-					<option value="admin">Administrador</option>
+					<option <?php if ($dados['tipo'] == 'editor') echo " selected "?> value="editor" >Editor</option>
+					<option <?php if ($dados['tipo'] == 'admin') echo " selected "?> value="admin">Administrador</option>
 				</select>
 			</div>
 			

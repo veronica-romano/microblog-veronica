@@ -1,8 +1,29 @@
-<?php 
+<?php
+use MicroBlog\Categoria;
+use MicroBlog\Noticia;
+
+
 require_once "../inc/cabecalho-admin.php";
+
+$categoria = new Categoria;
+$listaDeCategorias = $categoria->listar();
+if (isset($_POST['inserir'])) {
+	$noticia = new Noticia;
+	$noticia->usuario->setId($_SESSION['id']);
+	$noticia->setCategoriaId($_POST['categoria']);
+	$noticia->setTitulo($_POST['titulo']);
+	$noticia->setTexto($_POST['texto']);
+	$noticia->setResumo($_POST['resumo']);
+	$noticia->setDestaque($_POST['destaque']);
+	$imagem = $_FILES['imagem'];
+	$noticia->setImagem($imagem['name']);
+	$noticia->upload($imagem);
+	$noticia->inserir();
+	header("location:noticias.php");
+
+}
+
 ?>
-
-
 <div class="row">
 	<article class="col-12 bg-white rounded shadow my-1 py-4">
 		
@@ -10,15 +31,22 @@ require_once "../inc/cabecalho-admin.php";
 		Inserir nova notícia
 		</h2>
 				
-		<form class="mx-auto w-75" action="" method="post" id="form-inserir" name="form-inserir">
+		<form enctype="multipart/form-data" class="mx-auto w-75" action="" method="post" id="form-inserir" name="form-inserir" ">
 
             <div class="mb-3">
                 <label class="form-label" for="categoria">Categoria:</label>
                 <select class="form-select" name="categoria" id="categoria" required>
 					<option value=""></option>
-					<option value="1">Ciência</option>
-					<option value="2">Educação</option>
-					<option value="3">Tecnologia</option>
+					<?php
+						foreach ($listaDeCategorias as $categoria ) {
+						?>
+							<option value="<?= $categoria['id']?>"><?= $categoria['nome']?></option>
+						<?php
+						}
+
+					?>
+					
+			
 				</select>
 			</div>
 

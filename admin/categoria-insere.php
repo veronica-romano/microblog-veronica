@@ -1,5 +1,15 @@
 <?php 
+use MicroBlog\Categoria;
+use MicroBlog\ControledeAcesso;
 require_once "../inc/cabecalho-admin.php";
+$sessao = new ControledeAcesso;
+$sessao->verificaAcessoAdmin();
+if (isset($_POST['inserir'])) {
+	$categoria = new Categoria;
+	$categoria->setNome($_POST['nome']);
+	$categoria->inserir();
+	header("location:categorias.php");
+}
 ?>
 
 
