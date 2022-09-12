@@ -11,7 +11,7 @@ $noticia = new Noticia;
 $noticia->setId($_GET['id']);
 $noticia->usuario->setTipo($_SESSION['tipo']);
 $noticia->usuario->setId($_SESSION['id']);
-$dados = $noticia->listarUm();
+$livro = $noticia->listarUm();
 
 if (isset($_POST['atualizar'])) {
 	$noticia->setCategoriaId($_POST['categoria']);
@@ -19,7 +19,7 @@ if (isset($_POST['atualizar'])) {
     $noticia->setTexto($_POST['texto']);
     $noticia->setResumo($_POST['resumo']);
     if (empty($_FILES['imagem']['name'])) {
-        $noticia->setImagem($dados['imagem']);
+        $noticia->setImagem($livro['imagem']);
     } else {
         $noticia->upload($_FILES['imagem']);
         $noticia->setImagem($_FILES['imagem']['name']);
