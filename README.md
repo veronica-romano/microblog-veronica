@@ -1,6 +1,8 @@
 # microblog-veronica
  
+## Apresentação do projeto:
 
+Microblog foi o primeiro projeto com paginação que tivemos no curso Técnico em Informática para a Internet no Senc Penha.
 
 ```sql
 
